@@ -1,14 +1,13 @@
 import React from 'react'
 import './Navbar.css'
-import { Link} from 'react-router-dom'
+import TopNavbar from './Top-section/TopNavbar'
+import BottomNavbar from './Bottom-section/BottomNavbar'
 
 const Navbar = () => {
   return (
     <nav className='nav'>
-      <Link to="/home">Home</Link>
-      <Link to="/cart">Cart</Link>
-      <Link to="/login">Login</Link>
-      <Link to="/products">Products</Link>
+      <TopNavbar />
+      <BottomNavbar />
     </nav>
   )
 }

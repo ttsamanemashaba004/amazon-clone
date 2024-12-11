@@ -1,0 +1,27 @@
+.bottom-nav{
+    background-color: #085749; 
+    width: 100%;
+    height: 39px;
+    display: flex;
+    align-items: center;   
+}
+
+.left_header{
+    display: flex;
+    color: white;
+    font-size: 14px;
+    font-weight: 700;
+    align-items: center;
+}
+
+.menu{
+    display: flex;
+    align-items: center;
+    margin: 0px 15px;
+    
+}
+
+.all_options{
+    
+    margin: 0px 15px;
+}

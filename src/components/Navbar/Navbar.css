@@ -2,7 +2,5 @@
     background-color: green;
 }
 .nav{
-    gap: 10px;
-    display: flex;
-    justify-content: center;
+    height: 99px;
 }

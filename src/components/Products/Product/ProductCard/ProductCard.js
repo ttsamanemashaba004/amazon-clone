@@ -3,7 +3,7 @@ import './ProductCard.css'
 
 const ProductCard = () => {
   return (
-    <div>ProductCard</div>
+    <div></div>
   )
 }
 
