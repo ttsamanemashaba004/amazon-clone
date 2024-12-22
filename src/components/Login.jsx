@@ -1,17 +1,39 @@
 import { Link } from "react-router-dom";
 import "./Login.css";
-import { useEffect, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
+
+// REDUCER FUNCTION
+const reducer = (state, action) => {
+  if (action.type === "EMAIL_INPUT") {
+    return { ...state, emailValue: action.payload };
+  }
+
+  if (action.type === "PASS_INPUT") {
+    return { ...state, passwordValue: action.payload };
+  }
+  return { emailValue: "", passwordValue: "" };
+};
 
 function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  //USESTATES
   const [formIsValid, setformIsValid] = useState(false);
 
+  //USEREDUCERS                                                                                                                                                             
+  const [state, dispatch] = useReducer(reducer, {
+    emailValue: "",
+    passwordValue: "",
+  });
+
+  const { emailValue: email, passwordValue: password } = state;
+
+  //USEEFFECTS
   useEffect(() => {
     const identifier = setTimeout(() => {
       console.log("check");
-      setformIsValid(email.includes("@") && password.trim().length > 6);
-    }, 500);
+      setformIsValid(
+        email.includes("@") && password.trim().length > 6
+      );
+    }, 1000);
 
     return () => {
       console.log("cleanup");
@@ -19,19 +41,22 @@ function Login() {
     };
   }, [email, password]);
 
+  //FUNCTIONS
   function emailChangeHandler(e) {
-    setEmail(e.target.value);
+    dispatch({ type: "EMAIL_INPUT", payload: e.target.value });
   }
 
   function passwordChangeHandler(e) {
-    setPassword(e.target.value);
+    dispatch({ type: "PASS_INPUT", payload: e.target.value });
   }
 
   function signIn(e) {
     e.preventDefault();
-    console.log(formIsValid);
+    console.log("Entered Email: ", email);
+    console.log("Entered Password: ", password);
   }
 
+  //JSX
   return (
     <div className="login">
       <Link to="/">
@@ -46,7 +71,11 @@ function Login() {
         <form>
           {/* Email */}
           <h5>Email</h5>
-          <input type="text" value={email} onChange={emailChangeHandler} />
+          <input
+            type="text"
+            value={email}
+            onChange={emailChangeHandler}
+          />
           {/* Password */}
           <h5>Password</h5>
           <input
