@@ -1,22 +1,35 @@
 import { Link } from "react-router-dom";
 import "./Login.css";
-import { useRef } from "react";
+import { useEffect, useState } from "react";
 
 function Login() {
-  // useRef
-  const emailRef = useRef("");
-  const passwordRef = useRef("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [formIsValid, setformIsValid] = useState(false);
 
-  // useStates
+  useEffect(() => {
+    const identifier = setTimeout(() => {
+      console.log("check");
+      setformIsValid(email.includes("@") && password.trim().length > 6);
+    }, 500);
 
-  // functions for email password
+    return () => {
+      console.log("cleanup");
+      clearTimeout(identifier);
+    };
+  }, [email, password]);
 
-  // signIn button function
+  function emailChangeHandler(e) {
+    setEmail(e.target.value);
+  }
+
+  function passwordChangeHandler(e) {
+    setPassword(e.target.value);
+  }
+
   function signIn(e) {
     e.preventDefault();
-    const enteredEmail = emailRef.current.value;
-    const enteredPassword = passwordRef.current.value;
-    console.log("email: ", enteredEmail + " password: ", enteredPassword);
+    console.log(formIsValid);
   }
 
   return (
@@ -33,10 +46,14 @@ function Login() {
         <form>
           {/* Email */}
           <h5>Email</h5>
-          <input type="text" ref={emailRef} />
+          <input type="text" value={email} onChange={emailChangeHandler} />
           {/* Password */}
           <h5>Password</h5>
-          <input type="password" ref={passwordRef} />
+          <input
+            type="password"
+            value={password}
+            onChange={passwordChangeHandler}
+          />
           {/* Sign In Button */}
           <button type="submit" className="login_signInButton" onClick={signIn}>
             Sign In
