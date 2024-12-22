@@ -1,7 +1,24 @@
 import { Link } from "react-router-dom";
-import "./Login.css"
+import "./Login.css";
+import { useRef } from "react";
 
 function Login() {
+  // useRef
+  const emailRef = useRef("");
+  const passwordRef = useRef("");
+
+  // useStates
+
+  // functions for email password
+
+  // signIn button function
+  function signIn(e) {
+    e.preventDefault();
+    const enteredEmail = emailRef.current.value;
+    const enteredPassword = passwordRef.current.value;
+    console.log("email: ", enteredEmail + " password: ", enteredPassword);
+  }
+
   return (
     <div className="login">
       <Link to="/">
@@ -14,11 +31,14 @@ function Login() {
       <div className="login_container">
         <h1>Sign-In</h1>
         <form>
+          {/* Email */}
           <h5>Email</h5>
-          <input type="text" />
+          <input type="text" ref={emailRef} />
+          {/* Password */}
           <h5>Password</h5>
-          <input type="password" />
-          <button type="submit" className="login_signInButton">
+          <input type="password" ref={passwordRef} />
+          {/* Sign In Button */}
+          <button type="submit" className="login_signInButton" onClick={signIn}>
             Sign In
           </button>
         </form>
