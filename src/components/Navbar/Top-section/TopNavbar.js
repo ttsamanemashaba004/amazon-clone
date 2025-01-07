@@ -2,10 +2,10 @@ import React from "react";
 import "./TopNavbar.css";
 import { Link } from "react-router-dom";
 import SearchIcon from "@mui/icons-material/Search";
-import ShoppingBasketIcon from "@mui/icons-material/ShoppingBasket";
+import { FaShoppingCart } from "react-icons/fa";
 import { useSelector } from "react-redux";
 
-const TopNavbar = () => {
+const TopNavbar = ({ isAuthenticated, onLogout }) => {
   const basketItems = useSelector((state) => state.basket.items);
 
   const basketCount = basketItems.length;
@@ -39,12 +39,21 @@ const TopNavbar = () => {
           <span className="lan_option">EN</span>
         </div>
 
-        <Link to="/login" className="no_underline">
-          <div className="header_option">
-            <span className="header_optionOne">Hello, sign in</span>
-            <span className="header_optionTwo">Account & Lists</span>
-          </div>
-        </Link>
+        {isAuthenticated ? (
+          <Link to="/" className="no_underline" onClick={onLogout}>
+            <div className="header_option">
+              <span className="header_optionOne">Hello Guest</span>
+              <span className="header_optionTwo">Sign Out</span>
+            </div>
+          </Link>
+        ) : (
+          <Link to="/login" className="no_underline">
+            <div className="header_option">
+              <span className="header_optionOne">Hello Guest</span>
+              <span className="header_optionTwo">Sign In</span>
+            </div>
+          </Link>
+        )}
 
         <div className="header_option">
           <span className="header_optionOne">Returns</span>
@@ -53,7 +62,8 @@ const TopNavbar = () => {
 
         <Link to="/cart" className="cart_border">
           <div className="header_optionBasket">
-            <ShoppingBasketIcon fontSize="large" />
+            {/* <ShoppingBasketIcon fontSize="large" /> */}
+            <FaShoppingCart size={30} />
             <span className="header_optionTwo header_basketCount">
               {basketCount}
             </span>

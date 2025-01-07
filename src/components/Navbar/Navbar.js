@@ -3,10 +3,10 @@ import './Navbar.css'
 import TopNavbar from './Top-section/TopNavbar'
 import BottomNavbar from './Bottom-section/BottomNavbar'
 
-const Navbar = () => {
+const Navbar = ({isAuthenticated, onLogout}) => {
   return (
     <nav className='nav'>
-      <TopNavbar />
+      <TopNavbar isAuthenticated = {isAuthenticated} onLogout = {onLogout} />
       <BottomNavbar />
     </nav>
   )

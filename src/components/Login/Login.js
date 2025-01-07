@@ -1,36 +1,52 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import "./Login.css";
 import { Link } from "react-router-dom";
+import { type } from "@testing-library/user-event/dist/type";
+
+const reducer = (state, action) => {
+  if (action.type === "EMAIL_INPUT") {
+    return { ...state, emailValue: action.payload };
+  }
+
+  if (action.type === "PASS_INPUT") {
+    return { ...state, passwordValue: action.payload };
+  }
+};
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
   const [isFormValid, setIsFormValid] = useState(false);
+  const [state, dispatch] = useReducer(reducer, {
+    emailValue: "",
+    passwordValue: "",
+  });
 
   useEffect(() => {
     const identifier = setTimeout(() => {
       console.log("check");
-      setIsFormValid(email.includes("@") && password.trim().length > 7);
+      setIsFormValid(
+        state.emailValue.includes("@") && state.passwordValue.trim().length > 7
+      );
     }, 2000);
 
     return () => {
       console.log("Cleanup is triggered");
       clearTimeout(identifier);
     };
-  }, [email, password]);
+  }, [state.emailValue, state.passwordValue]);
 
   const emailChangeHandler = (e) => {
-    setEmail(e.target.value);
+    dispatch({ type: "EMAIL_INPUT", payload: e.target.value });
   };
 
   const passwordChangeHandler = (e) => {
-    setPassword(e.target.value);
+    dispatch({ type: "PASS_INPUT", payload: e.target.value });
   };
 
   const login = (e) => {
     e.preventDefault();
     console.log(isFormValid);
+    console.log("Email: ", state.emailValue);
+    console.log("Password: ", state.passwordValue);
   };
 
   return (
@@ -49,14 +65,14 @@ const Login = () => {
           <input
             type="text"
             placeholder="Email"
-            value={email}
+            value={state.emailValue}
             onChange={emailChangeHandler}
           />
           <h5>Password</h5>
           <input
             type="password"
             placeholder="Password"
-            value={password}
+            value={state.passwordValue}
             onChange={passwordChangeHandler}
           />
           <button type="submit" className="login_signInButton" onClick={login}>
