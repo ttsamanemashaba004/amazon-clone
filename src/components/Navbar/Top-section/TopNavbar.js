@@ -1,14 +1,24 @@
-import React from "react";
+import React, { useContext } from "react";
 import "./TopNavbar.css";
 import { Link } from "react-router-dom";
 import SearchIcon from "@mui/icons-material/Search";
 import { FaShoppingCart } from "react-icons/fa";
-import { useSelector } from "react-redux";
 
-const TopNavbar = ({ isAuthenticated, onLogout }) => {
-  const basketItems = useSelector((state) => state.basket.items);
+import ShoppingContext from "../../../context/shopping/ShoppingContext";
+import { auth } from "../../../firebase";
 
-  const basketCount = basketItems.length;
+const TopNavbar = () => {
+  const shoppingContext = useContext(ShoppingContext);
+  const { basket = [], user, setUser } = shoppingContext;
+
+  const handleAuthentication = () => {
+    if (user) {
+      auth.signOut().then(() => {
+        setUser(null);
+      });
+    }
+  };
+
   return (
     <div className="top-nav fade">
       <div className="left">
@@ -39,33 +49,28 @@ const TopNavbar = ({ isAuthenticated, onLogout }) => {
           <span className="lan_option">EN</span>
         </div>
 
-        {isAuthenticated ? (
-          <Link to="/" className="no_underline" onClick={onLogout}>
-            <div className="header_option">
-              <span className="header_optionOne">Hello Guest</span>
-              <span className="header_optionTwo">Sign Out</span>
-            </div>
-          </Link>
-        ) : (
-          <Link to="/login" className="no_underline">
-            <div className="header_option">
-              <span className="header_optionOne">Hello Guest</span>
-              <span className="header_optionTwo">Sign In</span>
-            </div>
-          </Link>
-        )}
+        <Link to={!user && "/login"} className="no_underline">
+          <div className="header_option" onClick={handleAuthentication}>
+            <span className="header_optionOne">
+              Hello {!user ? "Guest" : user.email}
+            </span>
+            <span className="header_optionTwo">
+              {user ? "Sign Out" : "Sign In"}
+            </span>
+          </div>
+        </Link>
 
         <div className="header_option">
           <span className="header_optionOne">Returns</span>
           <span className="header_optionTwo">& Orders</span>
         </div>
 
-        <Link to="/cart" className="cart_border">
+        <Link to="/checkout" className="cart_border">
           <div className="header_optionBasket">
             {/* <ShoppingBasketIcon fontSize="large" /> */}
             <FaShoppingCart size={30} />
             <span className="header_optionTwo header_basketCount">
-              {basketCount}
+              {basket.length}
             </span>
             <span className="cart">Cart</span>
           </div>

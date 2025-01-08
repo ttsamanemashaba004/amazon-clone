@@ -1,16 +1,18 @@
-import React from "react";
+import React, { useContext } from "react";
 import "./Product.css";
-import { useDispatch } from "react-redux";
-import { addToBasket } from "../../../redux/reducers/basketSlice";
+
+import ShoppingContext from "../../../context/shopping/ShoppingContext";
 
 const Product = ({ id, title, image, rating, price }) => {
-  const dispatch = useDispatch();
+  
+  const shoppingContext = useContext(ShoppingContext);
+  const { addToBasket } = shoppingContext;
 
-  const handleAddToBasket = () => {
-    dispatch(addToBasket({ id, title, image, rating, price }));
+  const addToBasketHandler = () => {
+    addToBasket({ item: { id, title, image, rating, price } });
   };
 
-  // Calculate the number of full stars, half stars , and empty stars
+  
 
   const fullStars = Math.floor(rating);
   const hasHalfStar = rating % 1 !== 0;
@@ -42,9 +44,12 @@ const Product = ({ id, title, image, rating, price }) => {
             ); // empty star
           })}
         </div>
-        <p className="product_price"><small className="dollar">$</small><strong className="price">{price}</strong></p>
+        <p className="product_price">
+          <small className="dollar">$</small>
+          <strong className="price">{price}</strong>
+        </p>
       </div>
-      <button className="product_button" onClick={handleAddToBasket}>
+      <button className="product_button"  onClick={addToBasketHandler}>
         Add to cart
       </button>
     </div>

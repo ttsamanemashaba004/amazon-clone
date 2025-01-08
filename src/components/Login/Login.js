@@ -1,52 +1,40 @@
-import React, { useEffect, useReducer, useState } from "react";
+import React, { useContext, useState } from "react";
 import "./Login.css";
-import { Link } from "react-router-dom";
-import { type } from "@testing-library/user-event/dist/type";
-
-const reducer = (state, action) => {
-  if (action.type === "EMAIL_INPUT") {
-    return { ...state, emailValue: action.payload };
-  }
-
-  if (action.type === "PASS_INPUT") {
-    return { ...state, passwordValue: action.payload };
-  }
-};
+import { Link, useNavigate } from "react-router-dom";
+import { auth } from "../../firebase";
+import ShoppingContext from "../../context/shopping/ShoppingContext";
 
 const Login = () => {
-  const [isFormValid, setIsFormValid] = useState(false);
-  const [state, dispatch] = useReducer(reducer, {
-    emailValue: "",
-    passwordValue: "",
-  });
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  useEffect(() => {
-    const identifier = setTimeout(() => {
-      console.log("check");
-      setIsFormValid(
-        state.emailValue.includes("@") && state.passwordValue.trim().length > 7
-      );
-    }, 2000);
+  const shoppingContext = useContext(ShoppingContext);
+  const { user } = shoppingContext;
 
-    return () => {
-      console.log("Cleanup is triggered");
-      clearTimeout(identifier);
-    };
-  }, [state.emailValue, state.passwordValue]);
+  const navigate = useNavigate();
 
-  const emailChangeHandler = (e) => {
-    dispatch({ type: "EMAIL_INPUT", payload: e.target.value });
-  };
-
-  const passwordChangeHandler = (e) => {
-    dispatch({ type: "PASS_INPUT", payload: e.target.value });
-  };
-
-  const login = (e) => {
+  const signIn = (e) => {
     e.preventDefault();
-    console.log(isFormValid);
-    console.log("Email: ", state.emailValue);
-    console.log("Password: ", state.passwordValue);
+    auth
+      .signInWithEmailAndPassword(email, password)
+      .then((auth) => {
+        if (auth) {
+          navigate("/");
+        }
+      })
+      .catch((error) => alert(error.message));
+  };
+
+  const register = (e) => {
+    e.preventDefault();
+    auth
+      .createUserWithEmailAndPassword(email, password)
+      .then((auth) => {
+        if (auth) {
+          navigate("/");
+        }
+      })
+      .catch((error) => alert(error.message));
   };
 
   return (
@@ -65,17 +53,17 @@ const Login = () => {
           <input
             type="text"
             placeholder="Email"
-            value={state.emailValue}
-            onChange={emailChangeHandler}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
           <h5>Password</h5>
           <input
             type="password"
             placeholder="Password"
-            value={state.passwordValue}
-            onChange={passwordChangeHandler}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
-          <button type="submit" className="login_signInButton" onClick={login}>
+          <button type="submit" className="login_signInButton" onClick={signIn}>
             Sign In
           </button>
         </form>
@@ -84,7 +72,7 @@ const Login = () => {
           Sale. Please see our Privacy Notice, our Cookies Notice and our
           Interest-Based Adds Notice.{" "}
         </p>
-        <button className="login_registerButton">
+        <button className="login_registerButton" onClick={register}>
           Create your Amazon Account
         </button>
       </div>
