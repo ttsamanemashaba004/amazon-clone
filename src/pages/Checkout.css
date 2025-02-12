@@ -3,6 +3,8 @@
     padding: 20px;
     background-color: #fff;
     height: max-content;
+    position: relative;
+    top: 90px
 }
 
 .checkout_title{

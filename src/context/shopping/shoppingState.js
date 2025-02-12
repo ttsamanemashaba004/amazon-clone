@@ -16,6 +16,12 @@ export const ShoppingState = (props) => {
     });
   };
 
+  const emptyBasket = () =>  {
+    dispatch({
+      type: "EMPTY_BASKET"
+    })
+  }
+
   const setUser = (user) => {
     dispatch({
       type: "SET_USER",
@@ -43,6 +49,7 @@ export const ShoppingState = (props) => {
         addToBasket,
         setUser,
         removeFromBasket,
+        emptyBasket
       }}
     >
       {props.children}

@@ -3,4 +3,7 @@
 }
 .nav{
     height: 99px;
+    position: fixed;
+    z-index: 1000;
+    width: 100%;
 }

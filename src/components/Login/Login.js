@@ -1,15 +1,15 @@
-import React, { useContext, useState } from "react";
+import React, {  useState } from "react";
 import "./Login.css";
 import { Link, useNavigate } from "react-router-dom";
 import { auth } from "../../firebase";
-import ShoppingContext from "../../context/shopping/ShoppingContext";
+
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const shoppingContext = useContext(ShoppingContext);
-  const { user } = shoppingContext;
+
+
 
   const navigate = useNavigate();
 

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect} from "react";
+import React, { useContext, useEffect } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -26,11 +26,11 @@ const stripePromise = loadStripe(
   "pk_test_51QJyiQGmnwFVF56F7X6ApJCABEZAcalOFQUsQk781ZVfmNt0anxz1tvRZJmQDIi91rl5fOYV6ZEEK2FG2aoc5HwL00MEERY7sZ"
 );
 
-const PaymentWrapper = () => {
-  <Elements stripe={stripePromise}>
-    <Payment />
-  </Elements>
-}
+// const PaymentWrapper = () => {
+//   <Elements stripe={stripePromise}>
+//     <Payment />
+//   </Elements>;
+// };
 
 const App = () => {
   const shoppingContext = useContext(ShoppingContext);
@@ -38,8 +38,6 @@ const App = () => {
 
   useEffect(() => {
     auth.onAuthStateChanged((authUser) => {
-      console.log("User is ->", authUser);
-
       if (authUser) {
         setUser(authUser);
       } else {
@@ -82,7 +80,14 @@ const AppContent = () => {
         <Route path="/products" element={<Products />} />
         <Route path="/products/:id" element={<ProductDetails />} />
 
-        <Route path="/payment" element={<PaymentWrapper />} />
+        <Route
+          path="/payment"
+          element={
+            <Elements stripe={stripePromise}>
+              <Payment />
+            </Elements>
+          }
+        />
 
         <Route path="/login" element={<Auth />} />
 
